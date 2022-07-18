@@ -1,0 +1,144 @@
+:root {
+    --boardSize: 11;
+    --host-ship-bg-color: #b9daff;
+    --table-bg-color: #ffffff;
+    --table-border-color: #b1b1b1;
+    
+  }
+  .game-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--boardSize), 30px);
+  }
+  
+  .cell {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid var(--table-border-color);
+    background-color: var(--table-bg-color);
+    transition: background-color 0.2s ease-in-out;
+    align-items: center;
+  }
+  .placed-ship {
+    background-color: var(--host-ship-bg-color);
+  
+  }
+  .hover-ship {
+    background-color: #8ffa97;
+    cursor: pointer;
+  }
+  
+  .axe {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      text-justify: middle;
+      border: 1px solid var(--table-border-color);
+      background-color: var(--table-bg-color);
+  }
+  .flex-game-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .flex-column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .flex-host-container {
+    display: flex;
+  }
+  .legend {
+    margin: 10px;
+  }
+  .wholeShip {
+    display: flex;
+    margin-top: 10px;
+  gap: 1px;
+  
+  }
+  .ship-part {
+    width: 10px;
+    height: 10px;
+    text-align: center;
+    text-justify: middle;
+    border: 1px solid #8cabfa;
+    border-radius: 3px;
+    background-color: var(--host-ship-bg-color);
+    transition: background-color 0.2s ease-in-out; 
+  }
+  .remove-ship{
+      display: flex;
+      width: 13px;
+      height: 13px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 12px;
+      color: #000000;
+      border: 1px solid #ff0000;
+      border-radius: 10px;
+      background-color: var(--table-bg-color);
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out; 
+      margin-left: 10px;
+      padding: 0px;
+  }
+  .legend{
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 80px;
+  }
+  .ship-4{
+      width: 60px;
+      height: 15px;
+      text-align: center;
+      text-justify: middle;
+      border: 1px solid #8cabfa;
+      border-radius: 3px;
+      background-color: var(--host-ship-bg-color);
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;  
+  }
+  .ship-3{
+      width: 45px;
+      height: 15px;
+      text-align: center;
+      text-justify: middle;
+      border: 1px solid #8cabfa;
+      border-radius: 3px;
+      background-color: var(--host-ship-bg-color);
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;  
+  }
+  .ship-2{
+      width: 30px;
+      height: 15px;
+      text-align: center;
+      text-justify: middle;
+      border: 1px solid #8cabfa;
+      border-radius: 3px;
+      background-color: var(--host-ship-bg-color);
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;  
+  }
+  .ship-1{
+      width: 15px;
+      height: 15px;
+      text-align: center;
+      text-justify: middle;
+      border: 1px solid #8cabfa;
+      border-radius: 3px;
+      background-color: var(--host-ship-bg-color);
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;  
+  }
+  .placed{
+      border: 1px solid #fa8c8c;
+      border-radius: 3px;
+      background-color: #ffb9b9;
+      cursor:not-allowed;
+  }

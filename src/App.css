@@ -1,0 +1,235 @@
+:root {
+  --boardSize: 11;
+  --host-ship-bg-color: #b9daff;
+  --table-bg-color: #ffffff;
+  --table-border-color: #b1b1b1;
+}
+/* *{
+  border: solid 1px;
+} */
+.App-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* font-size: calc(var(--boardSize) * 0.5px); */
+  font-family: "Roboto", sans-serif;
+  /* color: #b1b1b1; */
+  /* margin-top: 10px; */
+}
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--boardSize), 30px);
+}
+
+.cell {
+  display: flex;
+  /* position: relative; */
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid var(--table-border-color);
+  background-color: var(--table-bg-color);
+  transition: background-color 0.2s ease-in-out;
+  align-items: center;
+}
+.placed-ship {
+  background-color: var(--host-ship-bg-color);
+}
+.opponent-turn {
+  position: absolute;
+  height: 352px;
+  width: 330px;
+  background: #b1b1b11f;
+  cursor: not-allowed;
+}
+
+.hover-ship {
+  background-color: #8ffa97;
+  cursor: pointer;
+}
+
+.axe {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  text-justify: middle;
+  border: 1px solid var(--table-border-color);
+  background-color: var(--table-bg-color);
+}
+.grid-game-container {
+  display: grid;
+  grid-template-columns: 40% 40%;
+  justify-content: space-around;
+  align-items: center;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.game-ID {
+  display: block;
+}
+.name {
+  max-width: 450px;
+  min-width: 400px;
+  width: 100%;
+  height: 30px;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px;
+  margin: 0px 0px 15px 0px;
+}
+.my-name-clr-bg {
+  background: rgb(20, 153, 225);
+  color: aliceblue;
+}
+.opponent-name-clr-bg {
+  background: rgb(170, 0, 255);
+  color: aliceblue;
+}
+.legend-board-container {
+  display: flex;
+}
+/* .wholeShip {
+  display: flex;
+  margin-top: 10px;
+  gap: 1px;
+} */
+/* .ship-part {
+  width: 10px;
+  height: 10px;
+  text-align: center;
+  text-justify: middle;
+  border: 1px solid #8cabfa;
+  border-radius: 3px;
+  background-color: var(--host-ship-bg-color);
+  transition: background-color 0.2s ease-in-out;
+} */
+.remove-ship {
+  display: flex;
+  /* position: absolute; */
+  top: -5px;
+  left: -5px;
+  width: 13px;
+  height: 13px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 12px;
+  color: #000000;
+  border: 1px solid #ff0000;
+  border-radius: 10px;
+  background-color: var(--table-bg-color);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  /* margin-left: 10px; */
+  padding: 0px;
+}
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 60px;
+}
+.player1-legend {
+  margin-right: 10px;
+}
+.player2-legend {
+  align-items: flex-end;
+  margin-left: 10px;
+  cursor: default;
+}
+.opponent-disconnected {
+  width: 100%;
+  height: 100%;
+  background-color: #ff0000;
+  color: aliceblue;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-in-out;
+}
+.ship {
+  text-align: center;
+  text-justify: middle;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.ship-4 {
+  width: 60px;
+  height: 15px;
+}
+.ship-3 {
+  width: 45px;
+  height: 15px;
+}
+.ship-2 {
+  width: 30px;
+  height: 15px;
+}
+.ship-1 {
+  width: 15px;
+  height: 15px;
+}
+.placed {
+  border: 1px solid #8cabfa;
+  background-color: #ffffff;
+  cursor: not-allowed;
+}
+.sank {
+  border: 1px solid #fa8c8c;
+  background-color: #ffb9b9;
+  cursor: not-allowed;
+}
+.player1-ship-color {
+  background-color: var(--host-ship-bg-color);
+  border: 1px solid #8cabfa;
+}
+.player2-ship-color {
+  background-color: #e5b9ff;
+  border: 1px solid #c78cfa;
+}
+.hit {
+  background-color: #ff6161;
+  /* border: 1px solid #ff0000; */
+}
+.miss {
+  background-color: #dfe3e6;
+  /* border: 1px solid #797878; */
+}
+@media screen and (max-width: 885px) {
+  .grid-game-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .opponent {
+    flex-direction: row-reverse;
+  }
+  .player2-legend {
+    align-items: start;
+    margin-right: 10px;
+    margin-left: 0px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .wait-to-player {
+    animation: text-blink infinite 1.5s linear;
+  }
+}
+@keyframes text-blink {
+  0% {
+    color: #000000;
+  }
+  50% {
+    color: #ffffff;
+  }
+  100% {
+    color: #000000;
+  }
+}
