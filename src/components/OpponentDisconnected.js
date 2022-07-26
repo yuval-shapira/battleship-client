@@ -1,14 +1,16 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import FaceTwoToneIcon from "@mui/icons-material/FaceTwoTone";
 
-export default function OpponentDisconnected({ opponentName, setResetSession }) {
+export default function OpponentDisconnected({
+  opponentName,
+  setResetSession,
+}) {
   const [open, setOpen] = React.useState(true);
 
   function handleClick() {

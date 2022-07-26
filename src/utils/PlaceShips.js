@@ -1,5 +1,5 @@
 //return an array of directions that the ship can be placed in
-export function optionalDirections(table, x, y, ship, firstPlaced) {
+export function optionalDirections(table, x, y, ship) {
   const directions = [];
   if (y + ship.shipSize <= 11) {
     const downDirection = checkForDisabledCells(
@@ -112,7 +112,6 @@ export function cellsToMark(direction, x, y, shipSize) {
       for (let i = x; i < x + shipSize; i++) {
         cellsToMark.push({ x: i, y });
       }
-      // console.log(cellsToMark);
       break;
     case "left":
       for (let i = x; i > x - shipSize; i--) {

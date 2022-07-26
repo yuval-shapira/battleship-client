@@ -3,39 +3,35 @@ import { initBoard, initLegend } from "../utils/InitTableGame";
 
 export default function highLevelReducer(state, { type, payload }) {
   switch (type) {
+
     case "SET_MY_ID":
-      return {
-        ...state,
-        myID: payload.myID,
-      };
+      const setNameState = cloneDeep(state);
+      setNameState.myID = payload.myID;
+      return setNameState;
 
     case "GAME_ID_REQUIRED":
-      return {
-        ...state,
-        myName: payload.myName,
-        gameIDRequired: true,
-      };
+      const gameIDReqState = cloneDeep(state);
+      gameIDReqState.myName = payload.myName;
+      gameIDReqState.gameIDRequired = true;
+      return gameIDReqState;
 
     case "JOIN_GAME_REQUIRED":
-      return {
-        ...state,
-        myName: payload.myName,
-        joinGameRequired: true,
-      };
+      const joinGameReqState = cloneDeep(state);
+      joinGameReqState.myName = payload.myName;
+      joinGameReqState.joinGameRequired = true;
+      return joinGameReqState;
 
     case "SET_OPPONENT_NAME":
-      return {
-        ...state,
-        opponentName: payload.opponentName,
-        opponentID: payload.opponentID,
-        isOpponentReady: payload.isOpponentReady,
-      };
+      const oppNameState = cloneDeep(state);
+      oppNameState.opponentName = payload.opponentName;
+      oppNameState.opponentID = payload.opponentID;
+      oppNameState.isOpponentReady = payload.isOpponentReady;
+      return oppNameState;
 
     case "ENTER_NAME":
-      return {
-        ...state,
-        myName: payload.myName,
-      };
+      const enterNameState = cloneDeep(state);
+      enterNameState.myName = payload.myName;
+      return enterNameState;
 
     case "CREATE_A_GAME":
       const createGameState = cloneDeep(state);
@@ -143,18 +139,6 @@ export default function highLevelReducer(state, { type, payload }) {
       gameOverState.gameState = "GAME_OVER";
       return gameOverState;
 
-    case "WINNER":
-      const winnerState = cloneDeep(state);
-      winnerState.winner = true;
-      winnerState.gameOverMessage = true;
-      return winnerState;
-
-    case "LOSER":
-      const loserState = cloneDeep(state);
-      loserState.loser = true;
-      loserState.gameOverMessage = true;
-      return loserState;
-
     case "CLOSE_GAME_OVER_MESSAGE":
       const closeGameOverMessageState = cloneDeep(state);
       closeGameOverMessageState.gameOverMessage = false;
@@ -163,10 +147,6 @@ export default function highLevelReducer(state, { type, payload }) {
     case "SET_NEW_GAME":
       const newGameState = cloneDeep(state);
       newGameState.gameState = "PLACE_SHIPS";
-      // newGameState.myName = null;
-      // newGameState.myID = null;
-      // newGameState.opponentName = null;
-      // newGameState.opponentID = null;
       newGameState.myTable = [];
       newGameState.myLegend = [];
       newGameState.opponentTable = initBoard();
@@ -174,7 +154,6 @@ export default function highLevelReducer(state, { type, payload }) {
       newGameState.isOpponentReady = false;
       newGameState.gameOverMessage = false;
       newGameState.winner = false;
-      newGameState.loser = false;
       newGameState.gameIDRequired = false;
       newGameState.joinGameRequired = false;
       newGameState.currentGuessResults = null;
@@ -187,10 +166,11 @@ export default function highLevelReducer(state, { type, payload }) {
       opponentDisconnectedState.gameState = "GAME_OVER";
       opponentDisconnectedState.opponentDisconnected = true;
       return opponentDisconnectedState;
- 
+
     case "RESET_SESSION":
       const resetSessionState = cloneDeep(state);
       resetSessionState.gameState = "ENTER_NAME";
+      resetSessionState.gameID = null;
       resetSessionState.myName = null;
       resetSessionState.myID = null;
       resetSessionState.opponentName = null;
@@ -202,7 +182,6 @@ export default function highLevelReducer(state, { type, payload }) {
       resetSessionState.isOpponentReady = false;
       resetSessionState.gameOverMessage = false;
       resetSessionState.winner = false;
-      resetSessionState.loser = false;
       resetSessionState.gameIDRequired = false;
       resetSessionState.joinGameRequired = false;
       resetSessionState.currentGuessResults = null;

@@ -13,11 +13,11 @@ export default function EnterPlayerName({
   const [gameID, setGameID] = React.useState("");
 
   useEffect(() => {
-    gameIDRequired === true && createGame(highLevelDispatch, onOpponentName);
+    gameIDRequired && createGame(highLevelDispatch, onOpponentName);
   }, [gameIDRequired]);
 
   useEffect(() => {
-    joinGameRequired === true &&
+    joinGameRequired &&
       joinGame(gameID, myName, highLevelDispatch, onOpponentName);
   }, [joinGameRequired]);
 

@@ -1,5 +1,3 @@
-//import React from "react";
-
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -7,10 +5,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-//import Alert from "@mui/material/Alert";
 
-
-export default function GameOverAlert({isWonTheGame, highLevelDispatch}) {
+export default function GameOverAlert({ isWonTheGame, highLevelDispatch }) {
   const [open, setOpen] = React.useState(true);
 
   const closeButton = () => {
@@ -18,28 +14,20 @@ export default function GameOverAlert({isWonTheGame, highLevelDispatch}) {
     highLevelDispatch({
       type: "CLOSE_GAME_OVER_MESSAGE",
     });
-  
-  }
+  };
   const titleMSG = isWonTheGame ? "Congratulations!" : "Too bad....";
-  const message = isWonTheGame
-    ? "You won the game"
-    : "You lost the game"; 
+  const message = isWonTheGame ? "You won the game" : "You lost the game";
   return (
     <div>
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button> */}
       <Dialog
         open={open}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {titleMSG}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{titleMSG}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {message} 
+            {message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -49,8 +37,5 @@ export default function GameOverAlert({isWonTheGame, highLevelDispatch}) {
         </DialogActions>
       </Dialog>
     </div>
-    // <Alert severity={alertSeverity} onClose={() => {closeButton(highLevelDispatch)}}>
-    //   {alertMessage}
-    // </Alert>
   );
 }

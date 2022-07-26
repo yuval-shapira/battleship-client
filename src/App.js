@@ -23,7 +23,6 @@ const initHighLevelState = {
   isOpponentReady: false,
   gameOverMessage: false,
   winner: false,
-  loser: false,
   gameIDRequired: false,
   joinGameRequired: false,
   myTurn: false,
@@ -41,15 +40,14 @@ export default function App() {
     React.useState(false);
 
   useEffect(() => {
-    const isPlayerReady = highLevelState.imReady;
     dataToSend &&
-      sendMyName(dataToSend.gameID, dataToSend.myName, isPlayerReady);
+      sendMyName(dataToSend.gameID, dataToSend.myName, highLevelState.imReady);
   }, [dataToSend]);
 
   useEffect(() => {
     addDisconnectListener &&
       disconnectesListener(highLevelState.opponentID, onOpponentDisconnected);
-  }, [addDisconnectListener]);
+  }, [addDisconnectListener]); 
 
   useEffect(() => {
     openSocket(highLevelDispatch);

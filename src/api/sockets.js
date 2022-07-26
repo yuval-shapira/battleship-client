@@ -1,4 +1,4 @@
-import io from "socket.io-client"; 
+import io from "socket.io-client";
 
 let socket;
 
@@ -7,17 +7,17 @@ export function openSocket(highLevelDispatch) {
   //socket = io("https://battleship-game-yuval.herokuapp.com");
   socket.on("connect", () => {});
   socket.on("socket_id", (mySocketID) => {
-  highLevelDispatch({
-    type: "SET_MY_ID",
-    payload: { myID: mySocketID },
+    highLevelDispatch({
+      type: "SET_MY_ID",
+      payload: { myID: mySocketID },
+    });
   });
-  });
-
 }
 
 // player 1
 export function createGame(highLevelDispatch, onOpponentName) {
   const gameID = Math.round(Math.random() * 1000000).toString(36);
+
   highLevelDispatch({
     type: "CREATE_A_GAME",
     payload: { gameID },
@@ -29,9 +29,7 @@ export function createGame(highLevelDispatch, onOpponentName) {
     highLevelDispatch({
       type: "OPPONENT_IS_READY",
     });
-  }
-  );
-
+  });
 }
 
 // player 2
@@ -39,7 +37,7 @@ export function joinGame(
   gameID,
   playerName,
   highLevelDispatch,
-  onOpponentName,
+  onOpponentName
 ) {
   highLevelDispatch({
     type: "JOIN_A_GAME",
@@ -52,8 +50,7 @@ export function joinGame(
     highLevelDispatch({
       type: "OPPONENT_IS_READY",
     });
-  }
-  );
+  });
 }
 
 export function disconnectesListener(playerID, onOpponentDisconnected) {
@@ -64,8 +61,8 @@ export function sendMyName(gameID, playerName, isPlayerReady) {
   socket.emit("get_host_name", { gameID, playerName, isPlayerReady });
 }
 
-export function sendImReady(gameID){
-    socket.emit("i_am_ready", gameID);
+export function sendImReady(gameID) {
+  socket.emit("i_am_ready", gameID);
 }
 
 export function sendMyMove(gameID, myMove) {
@@ -74,8 +71,15 @@ export function sendMyMove(gameID, myMove) {
 }
 
 export function sendMyMoveResponse(gameID, myMoveResponse) {
-  const { guess, x, y, shipID, isOpponentWon} = myMoveResponse;
-  socket.emit("my_move_response", { gameID, guess, x, y, shipID, isOpponentWon });
+  const { guess, x, y, shipID, isOpponentWon } = myMoveResponse;
+  socket.emit("my_move_response", {
+    gameID,
+    guess,
+    x,
+    y,
+    shipID,
+    isOpponentWon,
+  });
 }
 // Refresh the state inside the functions
 export function playListeners(onOpponentPlayed, onMyMoveResponse) {
@@ -85,25 +89,23 @@ export function playListeners(onOpponentPlayed, onMyMoveResponse) {
   socket.on("my_move_response", onMyMoveResponse);
 }
 
-export function endOfGameListeners(setNewGameReq, onOpponentResponse){
+export function endOfGameListeners(setNewGameReq, onOpponentResponse) {
   socket.on("new_game_req", (playerName) => {
     setNewGameReq(playerName);
-  }
-  );
+  });
 }
 
-export function sendNewGameRequest(gameID, playerName, onOpponentResponse){
+export function sendNewGameRequest(gameID, playerName, onOpponentResponse) {
   socket.off("new_game_response");
-  socket.emit("new_game_request", {gameID, playerName});
-  socket.on("new_game_response", (onOpponentResponse))
+  socket.emit("new_game_request", { gameID, playerName });
+  socket.on("new_game_response", onOpponentResponse);
 }
 
-export function responseForNewGame(gameID, myResponse){
-  socket.emit("new_game_response", {gameID, myResponse});
-
+export function responseForNewGame(gameID, myResponse) {
+  socket.emit("new_game_response", { gameID, myResponse });
 }
 // when opp disconnected, it's required to close all socket in order to set new game
-export function closeSockets(){
+export function closeSockets() {
   socket.off("player1_name");
   socket.off("player2_name");
   socket.off("opponent_is_ready");

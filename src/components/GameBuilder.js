@@ -88,8 +88,7 @@ export default function GameBuilder({ highLevelDispatch, game }) {
         host.table,
         x,
         y,
-        host.selectedShip,
-        host.firstPlaced
+        host.selectedShip
       );
       //return array with all the cells to mark in green
       const shipToPlace = suggesmentOption(

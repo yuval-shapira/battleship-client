@@ -8,10 +8,8 @@ import {
   playListeners,
   sendImReady,
 } from "../api/sockets";
-import GameOverAlert from "../utils/gameOverMessage";
 
 export default function PlayGame({ game, highLevelDispatch }) {
-  const [opponentLeft, setOpponentLeft] = React.useState(false);
   const [myMove, setMyMove] = React.useState(null);
   const [myMoveResponse, setMyMoveResponse] = React.useState(null);
 
@@ -24,13 +22,12 @@ export default function PlayGame({ game, highLevelDispatch }) {
   }, [myMove]);
 
   useEffect(() => {
-    if(myMoveResponse !== null){
+    if (myMoveResponse !== null) {
       sendMyMoveResponse(game.gameID, myMoveResponse);
-      myMoveResponse.isOpponentWon && (
+      myMoveResponse.isOpponentWon &&
         highLevelDispatch({
           type: "GAME_OVER",
-        })
-      )
+        });
     }
   }, [myMoveResponse]);
 
@@ -43,7 +40,7 @@ export default function PlayGame({ game, highLevelDispatch }) {
     const guess = game.myTable[x][y].shipID !== null ? "hit" : "miss";
     let isOpponentWon = false;
     if (guess === "hit") {
-      let countOfHits = 18;
+      let countOfHits = 1;
       let countOfShipParts = 0;
       game.myLegend.forEach((ship) => {
         countOfHits += ship.numOfHits;
@@ -71,12 +68,6 @@ export default function PlayGame({ game, highLevelDispatch }) {
     highLevelDispatch({
       type: "MY_MOVE_RESPONSE",
       payload: { x, y, guess, shipID, isIWon },
-    });
-  }
-  function mouseHandler(action, x, y) {
-    highLevelDispatch({
-      type: action,
-      payload: { x, y },
     });
   }
 
@@ -122,10 +113,7 @@ export default function PlayGame({ game, highLevelDispatch }) {
                   loser={game.loser}
                 />
                 {/* !!!!!!! OPPONENT GAME !!!!!!!! */}
-                <GameBoard
-                  table={game.opponentTable}
-                  handleClick={shoot}
-                />
+                <GameBoard table={game.opponentTable} handleClick={shoot} />
                 {/* !!!!!!! OPPONENT LEGEND !!!!!!!! */}
                 <LegendBoard
                   legendTable={game.opponentLegend}

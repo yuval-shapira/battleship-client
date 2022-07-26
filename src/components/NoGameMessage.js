@@ -4,13 +4,13 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function StartNewGame({ setNewGameRes }) {
+export default function NoGameMessage({opponentName, setNoGameMessage}) {
   const [open, setOpen] = React.useState(true);
 
-  function handleClick(action) {
+  const closeButton = () => {
     setOpen(false);
-    setNewGameRes(action);
-  }
+    setNoGameMessage(false);
+  };
 
   return (
     <div>
@@ -19,19 +19,10 @@ export default function StartNewGame({ setNewGameRes }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          Do you want to play another game?
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{opponentName} don`t want to play another game</DialogTitle>
         <DialogActions>
-          <Button variant="outlined" onClick={() => handleClick("no")}>
-            No
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleClick("yes")}
-            autoFocus
-          >
-            Yes, I want to play
+          <Button variant="outlined" onClick={() => closeButton()}>
+            OK
           </Button>
         </DialogActions>
       </Dialog>

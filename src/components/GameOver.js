@@ -3,10 +3,11 @@ import LegendBoard from "./LegendBoard";
 import GameBoard from "./GameBoard";
 import DisableBoard from "./DisableBoard";
 import { endOfGameListeners, sendNewGameRequest, responseForNewGame, closeSockets } from "../api/sockets";
-import GameOverAlert from "../utils/gameOverMessage";
+import GameOverAlert from "./gameOverMessage"; 
 import NewGameButton from "./NewButton";
 import StartNewGame from "./StartNewGame";
 import WaitingLoader from "./WaitingLoader";
+import NoGameMessage from "./NoGameMessage";
 import OpponentDisconnected from "./OpponentDisconnected";
 
 export default function GameOver({ game, highLevelDispatch }) {
@@ -14,6 +15,7 @@ export default function GameOver({ game, highLevelDispatch }) {
   const [newGameReq, setNewGameReq] = React.useState(null);
   const [newGameRes, setNewGameRes] = React.useState(null);
   const [resetSession, setResetSession] = React.useState(false);
+  const [noGameMessage, setNoGameMessage] = React.useState(false);
 
   useEffect(() => {
     endOfGameListeners(setNewGameReq, onOpponentResponse);
@@ -26,6 +28,8 @@ export default function GameOver({ game, highLevelDispatch }) {
       if(newGameRes === "yes") {
         highLevelDispatch({ type: "SET_NEW_GAME" });
       }
+      setNewGameRes(null);
+      setNewGameReq(null);
     };
   }, [newGameRes]); 
 
@@ -45,9 +49,7 @@ export default function GameOver({ game, highLevelDispatch }) {
         type: "SET_NEW_GAME",
       });
     }else{
-        highLevelDispatch({
-            type: "GAME_OVER",
-          })
+      setNoGameMessage(true);
     }
   }
   return (
@@ -86,8 +88,8 @@ export default function GameOver({ game, highLevelDispatch }) {
           </div>
         </div>
       </main>
-      <div className="new-game-container">
-            <h3 className="new-game-button">
+       <div className="new-game-container">
+             <h3 className="new-game-button">
                 Invite {game.opponentName} for another game:
                 <NewGameButton action={"request-new-game"} func={newGameRequest}/>
             </h3>
@@ -98,12 +100,15 @@ export default function GameOver({ game, highLevelDispatch }) {
             highLevelDispatch={highLevelDispatch}
           />
         )}
-        {waitingLoader && (<WaitingLoader />)}
+        {waitingLoader && (<WaitingLoader opponentName={game.opponentName}/>)}
         {newGameReq && <StartNewGame 
-      setNewGameReq={setNewGameReq}
       setNewGameRes={setNewGameRes}
-      // opponentName={newGameReq}
+      setNewGameReq={setNewGameReq}
       />}
+        {noGameMessage && <NoGameMessage
+        opponentName={game.opponentName}
+        setNoGameMessage={setNoGameMessage}
+        setNewGameRes={setNewGameRes} />}
       {game.opponentDisconnected && (closeSockets(),
       <OpponentDisconnected 
       opponentName={game.opponentName}

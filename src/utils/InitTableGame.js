@@ -18,10 +18,10 @@ export default function initTableGame() {
     gameStarted: false,
   };
 }
-export function initBoard(){
+export function initBoard() {
   return createTableGame();
 }
-export function initLegend(){
+export function initLegend() {
   return createLegend();
 }
 function createTableGame() {
@@ -52,72 +52,19 @@ function createTableGame() {
   return newTableGame;
 }
 function createLegend() {
-  const newLegendArray = [
-    {
-      shipID: "ship-4-1",
-      className: "ship-4",
-      shipSize: 4,
-      shipNum: 1,
-    },
-    {
-      shipID: "ship-3-2",
-      className: "ship-3",
-      shipSize: 3,
-      shipNum: 2,
-    },
-    {
-      shipID: "ship-3-1",
-      className: "ship-3",
-      shipSize: 3,
-      shipNum: 1,
-    },
-    {
-      shipID: "ship-2-3",
-      className: "ship-2",
-      shipSize: 2,
-      shipNum: 3,
-    },
-    {
-      shipID: "ship-2-2",
-      className: "ship-2",
-      shipSize: 2,
-      shipNum: 2,
-    },
-    {
-      shipID: "ship-2-1",
-      className: "ship-2",
-      shipSize: 2,
-      shipNum: 1,
-    },
-    {
-      shipID: "ship-1-4",
-      className: "ship-1",
-      shipSize: 1,
-      shipNum: 4,
-    },
-    {
-      shipID: "ship-1-3",
-      className: "ship-1",
-      shipSize: 1,
-      shipNum: 3,
-    },
-    {
-      shipID: "ship-1-2",
-      className: "ship-1",
-      shipSize: 1,
-      shipNum: 2,
-    },
-    {
-      shipID: "ship-1-1",
-      className: "ship-1",
-      shipSize: 1,
-      shipNum: 1,
-    },
-  ];
-  newLegendArray.forEach((ship) => {
-    ship.shipLocation = [];
-    ship.isPlaced = null;
-    ship.numOfHits = 0;
-  });
+  const newLegendArray = [];
+  for(let shipSize = 4; shipSize >= 1; shipSize--){
+    for(let shipNum = 1; shipNum <= 5-shipSize; shipNum++){
+      newLegendArray.push({
+        shipID: `ship-${shipSize}-${shipNum}`,
+        className: `ship-${shipSize}`,
+        shipSize: shipSize,
+        shipNum: shipNum,
+        shipLocation: [],
+        isPlaced: null,
+        numOfHits: 0,
+      });
+    }
+  }
   return newLegendArray;
 }

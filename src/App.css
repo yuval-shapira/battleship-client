@@ -35,7 +35,6 @@
 }
 .disable-Board {
   position: absolute;
-  /* height: 100%; */
   width: 100%;
   background-color: #b1b1b1;
 }
@@ -157,7 +156,6 @@
 .player2-legend {
   align-items: flex-end;
   margin-left: 10px;
-  /* cursor: default; */
 }
 .player2-ship-color {
   background-color: #e5b9ff;
@@ -189,7 +187,6 @@
   text-align: center;
   text-justify: middle;
   border-radius: 3px;
-  /* cursor: pointer; */
   transition: background-color 0.2s ease-in-out;
 }
 .ship-4 {
