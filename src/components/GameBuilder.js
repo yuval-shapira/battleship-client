@@ -1,31 +1,17 @@
-//import "../App.css";
-import React, {useEffect} from "react";
-import gameBuilderReducer from "../store/GameBuilder.Reducer";
+import React from "react";
+import gameBuilderReducer from "../store/GameBuilderReducer";
 import initTableGame from "../utils/InitTableGame";
 import GameBoard from "./GameBoard";
 import LegendBoard from "./LegendBoard";
-
+import NewButton from "./NewButton";
 import { optionalDirections, suggesmentOption } from "../utils/PlaceShips.js";
 
-export default function GameBuilder({
-  highLevelDispatch,
-  myName,
-  opponentName,
-  opponentTable,
-  opponentLegend,
-  gameState,
-  isOpponentReady,
-}) {
+export default function GameBuilder({ highLevelDispatch, game }) {
   const [host, gameBuilderDispatch] = React.useReducer(
     gameBuilderReducer,
     initTableGame()
   );
 
-  const [imReady, setImReady] = React.useState(false);
-
-  useEffect(() => {
-    sendImReady();
-  }, [imReady]);
   function playButtonHandler() {
     highLevelDispatch({
       type: "PLACE_SHIPS",
@@ -34,7 +20,6 @@ export default function GameBuilder({
         myLegend: host.legend,
       },
     });
-    setImReady(true);
   }
 
   function removeShipHanler(shipID, x, y) {
@@ -72,7 +57,6 @@ export default function GameBuilder({
         payload: {
           x,
           y,
-          //className: "cell placed-ship",
         },
       });
     }
@@ -88,7 +72,6 @@ export default function GameBuilder({
         return;
       }
     }
-    //if (host.shipID !== shipID) {
     gameBuilderDispatch({
       type: "SELECT_SHIP",
       payload: {
@@ -97,12 +80,10 @@ export default function GameBuilder({
         shipNum,
       },
     });
-    //}
   }
 
   function mouseHandler(action, x, y) {
     if (host.selectedShip.shipID || host.firstPlaced) {
-      //return all posible directions
       const directions = optionalDirections(
         host.table,
         x,
@@ -129,21 +110,26 @@ export default function GameBuilder({
       });
     }
   }
-  const waitingMessage = opponentName ? 
-  `Waiting for you and ${opponentName} to be ready...`
-  : "Waiting for opponent to join...";
+  let waitingMessage = game.opponentName
+    ? `Waiting for you and ${game.opponentName} to be ready...`
+    : "Waiting for opponent to join...";
+
+  if (game.isOpponentReady) {
+    waitingMessage = `${game.opponentName} is ready and waiting for you to be ready...`;
+  }
+
   return (
     <>
       <main className="grid-game-container">
         <div className="flex-column">
-          <h2 className="name my-name-clr-bg">{myName}</h2>
+          <h2 className="name my-name-clr-bg">{game.myName}</h2>
           <div className="legend-board-container">
             {/* !!!!!!! LEGEND !!!!!!!! */}
             <LegendBoard
               legendTable={host.legend}
               selectShipHandler={selectShipHandler}
               playerType={"player1"}
-              gameState={gameState}
+              gameState={game.gameState}
             />
             {/* !!!!!!! GAME !!!!!!!! */}
             <GameBoard
@@ -153,28 +139,15 @@ export default function GameBuilder({
               removeShipHanler={removeShipHanler}
             />
           </div>
+          {host.numOfShipsPlaced === host.legend.length && !host.imReady && (
+            <NewButton action={"I-am-ready"} func={playButtonHandler} />
+          )}
         </div>
 
         <div className="flex-column">
-        {(!opponentName || !isOpponentReady) ? (
-            <h3 className="wait-to-player">{waitingMessage}</h3>
-          ) : (<>
-            <h2 className="name opponent-name-clr-bg">{opponentName}</h2>
-            <div className="legend-board-container opponent">
-            {!isOpponentReady && <div className="opponent-turn"></div>}
-            {/* !!!!!!! GAME !!!!!!!! */}
-            <GameBoard table={opponentTable} />
-            {/* !!!!!!! LEGEND !!!!!!!! */}
-            <LegendBoard legendTable={opponentLegend} playerType={"player2"} gameState={"PLACE_SHIPS"}/>
-          </div>
-            </>)}
+          <h3 className="wait-to-player">{waitingMessage}</h3>
         </div>
       </main>
-      {host.numOfShipsPlaced === host.legend.length && !host.gameStarted && (
-        <button onClick={() => playButtonHandler()} className="d">
-          Let's Play
-        </button>
-      )}
     </>
   );
 }

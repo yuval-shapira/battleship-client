@@ -1,5 +1,5 @@
-//import React from "react";
 import cloneDeep from "lodash.clonedeep";
+import { initBoard, initLegend } from "../utils/InitTableGame";
 
 export default function highLevelReducer(state, { type, payload }) {
   switch (type) {
@@ -8,41 +8,51 @@ export default function highLevelReducer(state, { type, payload }) {
         ...state,
         myID: payload.myID,
       };
+
     case "GAME_ID_REQUIRED":
       return {
         ...state,
+        myName: payload.myName,
         gameIDRequired: true,
       };
+
     case "JOIN_GAME_REQUIRED":
       return {
         ...state,
+        myName: payload.myName,
         joinGameRequired: true,
       };
+
     case "SET_OPPONENT_NAME":
       return {
         ...state,
         opponentName: payload.opponentName,
         opponentID: payload.opponentID,
+        isOpponentReady: payload.isOpponentReady,
       };
+
     case "ENTER_NAME":
       return {
         ...state,
         myName: payload.myName,
       };
+
     case "CREATE_A_GAME":
       const createGameState = cloneDeep(state);
       createGameState.gameID = payload.gameID;
       createGameState.myTurn = true;
       createGameState.gameState = "PLACE_SHIPS";
       return createGameState;
+
     case "JOIN_A_GAME":
       const joinGameState = cloneDeep(state);
       joinGameState.gameID = payload.gameID;
       joinGameState.gameState = "PLACE_SHIPS";
       return joinGameState;
+
     case "PLACE_SHIPS":
       const placeState = cloneDeep(state);
-      placeState.gameStarted = true;
+      placeState.imReady = true;
       placeState.myTable = cloneDeep(payload.myTable);
       placeState.myTable.forEach((row) => {
         row.forEach((cell) => {
@@ -69,21 +79,22 @@ export default function highLevelReducer(state, { type, payload }) {
           if (!cell?.axe) {
             cell.shipID ? (cell.cellStatus = "hit") : (cell.cellStatus = "");
           }
-          //cell.className = cell.className.replace(" hover-ship", "");
         });
       });
       return mouseLeaveState;
-      case "OPPONENT_IS_READY":
-        const opponentReadyState = cloneDeep(state);
-        opponentReadyState.isOpponentReady = true;
-        return opponentReadyState;
+
+    case "OPPONENT_IS_READY":
+      const opponentReadyState = cloneDeep(state);
+      opponentReadyState.isOpponentReady = true;
+      return opponentReadyState;
+
     case "OPPONENT_PLAYED":
       const opponentPlayedState = cloneDeep(state);
       opponentPlayedState.myTurn = payload.guess === "miss" ? true : false;
       opponentPlayedState.myTable[payload.x][payload.y].cellStatus =
         payload.guess;
       const shipID = opponentPlayedState.myTable[payload.x][payload.y].shipID;
-        opponentPlayedState.currentGuessResults = {
+      opponentPlayedState.currentGuessResults = {
         guess: payload.guess,
         x: payload.x,
         y: payload.y,
@@ -91,21 +102,17 @@ export default function highLevelReducer(state, { type, payload }) {
       };
 
       if (payload.guess === "hit") {
-      const shipInLegend = opponentPlayedState.myLegend.findIndex(
-        (ship) => ship.shipID === shipID
-      );
-      // opponentPlayedState.opponentLegend[shipInLegend].shipLocation.push({
-      //   x: payload.x,
-      //   y: payload.y,
-      // });
-      opponentPlayedState.myLegend[shipInLegend].numOfHits++;
+        const shipInLegend = opponentPlayedState.myLegend.findIndex(
+          (ship) => ship.shipID === shipID
+        );
+        opponentPlayedState.myLegend[shipInLegend].numOfHits++;
       }
-      console.log("isOpponentWon:", payload.isOpponentWon)
-      if(payload.isOpponentWon){
+      if (payload.isOpponentWon) {
         opponentPlayedState.gameOverMessage = true;
       }
 
       return opponentPlayedState;
+
     case "MY_MOVE_RESPONSE":
       const myMoveResponseState = cloneDeep(state);
       myMoveResponseState.opponentTable[payload.x][payload.y].cellStatus =
@@ -123,36 +130,86 @@ export default function highLevelReducer(state, { type, payload }) {
           y: payload.y,
         });
         myMoveResponseState.opponentLegend[shipInLegend].numOfHits++;
-        // myMoveResponseState.opponentLegend[shipInLegend]?.numberOfHits
-        //   ? myMoveResponseState.opponentTable[payload.x][payload.y]
-        //       .numberOfHits++
-        //   : (myMoveResponseState.opponentLegend[shipInLegend].numberOfHits = 1);
-        //  console.log("num of hits:", myMoveResponseState.opponentLegend[shipInLegend].numberOfHits);
-        console.log("isIWon:", payload.isIWon)
-        if(payload.isIWon){
-        myMoveResponseState.winner = true;
-        myMoveResponseState.gameOverMessage = true;
-      }
+        if (payload.isIWon) {
+          myMoveResponseState.winner = true;
+          myMoveResponseState.gameOverMessage = true;
+          myMoveResponseState.gameState = "GAME_OVER";
+        }
       }
       return myMoveResponseState;
+
+    case "GAME_OVER":
+      const gameOverState = cloneDeep(state);
+      gameOverState.gameState = "GAME_OVER";
+      return gameOverState;
+
     case "WINNER":
       const winnerState = cloneDeep(state);
       winnerState.winner = true;
       winnerState.gameOverMessage = true;
       return winnerState;
+
     case "LOSER":
       const loserState = cloneDeep(state);
+      loserState.loser = true;
       loserState.gameOverMessage = true;
       return loserState;
+
     case "CLOSE_GAME_OVER_MESSAGE":
       const closeGameOverMessageState = cloneDeep(state);
       closeGameOverMessageState.gameOverMessage = false;
       return closeGameOverMessageState;
+
+    case "SET_NEW_GAME":
+      const newGameState = cloneDeep(state);
+      newGameState.gameState = "PLACE_SHIPS";
+      // newGameState.myName = null;
+      // newGameState.myID = null;
+      // newGameState.opponentName = null;
+      // newGameState.opponentID = null;
+      newGameState.myTable = [];
+      newGameState.myLegend = [];
+      newGameState.opponentTable = initBoard();
+      newGameState.opponentLegend = initLegend();
+      newGameState.isOpponentReady = false;
+      newGameState.gameOverMessage = false;
+      newGameState.winner = false;
+      newGameState.loser = false;
+      newGameState.gameIDRequired = false;
+      newGameState.joinGameRequired = false;
+      newGameState.currentGuessResults = null;
+      newGameState.imReady = false;
+      newGameState.opponentDisconnected = false;
+      return newGameState;
+
     case "OPPONENT_DISCONNECTED":
       const opponentDisconnectedState = cloneDeep(state);
+      opponentDisconnectedState.gameState = "GAME_OVER";
       opponentDisconnectedState.opponentDisconnected = true;
       return opponentDisconnectedState;
-      
+ 
+    case "RESET_SESSION":
+      const resetSessionState = cloneDeep(state);
+      resetSessionState.gameState = "ENTER_NAME";
+      resetSessionState.myName = null;
+      resetSessionState.myID = null;
+      resetSessionState.opponentName = null;
+      resetSessionState.opponentID = null;
+      resetSessionState.myTable = [];
+      resetSessionState.myLegend = [];
+      resetSessionState.opponentTable = initBoard();
+      resetSessionState.opponentLegend = initLegend();
+      resetSessionState.isOpponentReady = false;
+      resetSessionState.gameOverMessage = false;
+      resetSessionState.winner = false;
+      resetSessionState.loser = false;
+      resetSessionState.gameIDRequired = false;
+      resetSessionState.joinGameRequired = false;
+      resetSessionState.currentGuessResults = null;
+      resetSessionState.imReady = false;
+      resetSessionState.opponentDisconnected = false;
+      return resetSessionState;
+
     default:
       return { ...state };
   }

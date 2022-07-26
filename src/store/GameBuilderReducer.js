@@ -3,7 +3,6 @@ import {
   checkChoosedDirection,
   cellsToMark,
   disableCellsAroundShip,
-  // suggesmentOption,
   checkIfNeedToBeDisable,
   toRemoveTag,
 } from "../utils/PlaceShips.js";
@@ -120,12 +119,9 @@ export default function gameBuilderReducer(state, { type, payload }) {
         } else {
           selectedCell.disable = true;
 
-          //firstState.legend[firstState.selectedShip.indexInLegend].shipLocation = [{x: payload.x, y: payload.y}];
-
           const shipInLegend = firstState.legend.findIndex(
             (ship) => ship.shipID === firstState.selectedShip.shipID
           );
-          //firstState.legend[shipInLegend].isPlaced = true;
           firstState.legend[shipInLegend].cellStatus = "placed";
           firstState.legend[shipInLegend].shipLocation = [
             { x: payload.x, y: payload.y },
@@ -238,7 +234,6 @@ export default function gameBuilderReducer(state, { type, payload }) {
                 ? (cell.cellStatus = "placed-ship")
                 : (cell.cellStatus = "");
             }
-            //cell.className = cell.className.replace(" hover-ship", "");
           });
         });
       return mouseLeaveState;

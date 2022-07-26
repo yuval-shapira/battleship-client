@@ -18,7 +18,6 @@ export default function GameBoard({table, handleClick = null, mouseHandler, remo
                 removeShipHanler={removeShipHanler ? removeShipHanler : null}
               />
             ))}
-            {/* add class name logic - start with change className to status... */}
           </div>
         ))}
       </div>

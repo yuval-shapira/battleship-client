@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
-
 export default function initTableGame() {
   const initTableGame = createTableGame();
   const legendArray = createLegend();
@@ -8,7 +6,6 @@ export default function initTableGame() {
     table: initTableGame,
     player1: null,
     player2: null,
-    gameID: uuidv4(),
     selectedShip: {
       shipID: null,
       shipSize: null,
@@ -17,14 +14,14 @@ export default function initTableGame() {
       y: null,
     },
     firstPlaced: false,
-    numOfShipsPlaced: 8,
+    numOfShipsPlaced: 0,
     gameStarted: false,
   };
 }
-export function initOpponentTableGame(){
+export function initBoard(){
   return createTableGame();
 }
-export function initOpponentLegend(){
+export function initLegend(){
   return createLegend();
 }
 function createTableGame() {

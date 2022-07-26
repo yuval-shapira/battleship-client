@@ -7,15 +7,18 @@ export default function LegendBoard({legendTable, selectShipHandler = null, play
     <div className={`legend ${legendClassName}`}>
       {legendTable.map((ship) => {
         let className = `ship ${ship.className}`;
+        if(gameState === "ENTER_NAME"){
+          className = className + ` ${shipPlayerType}`;
+        }
         if(gameState === "PLACE_SHIPS") {
-          if(playerType === "player1" && ship.shipLocation.length === ship.shipSize){
-            className = className + " placed";
+          // if(playerType === "player1" && ship.shipLocation.length === ship.shipSize){
+          if(ship.shipLocation.length === ship.shipSize){
+              className = className + " placed";
             }else{
-              className = className + ` ${shipPlayerType}`;
+              className = className + ` cursor-pointer ${shipPlayerType}`;
             }
         }
-        if(gameState === "GAME_STARTED") {
-          //if(ship.shipLocation.length === ship.shipSize){
+        if(gameState === "GAME_STARTED" || gameState === "GAME_OVER") {
           if(ship.numOfHits === ship.shipSize){
               className = className + " sank";
           }else{

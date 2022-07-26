@@ -2,7 +2,6 @@
 export function optionalDirections(table, x, y, ship, firstPlaced) {
   const directions = [];
   if (y + ship.shipSize <= 11) {
-    //if((firstPlaced && x === ship.x && y > ship.y)){
     const downDirection = checkForDisabledCells(
       "down",
       x,
@@ -11,16 +10,12 @@ export function optionalDirections(table, x, y, ship, firstPlaced) {
       table
     );
     downDirection && directions.push("down");
-    // }
   }
   if (y - ship.shipSize >= 0) {
-    // if((firstPlaced && x === ship.x && y < ship.y)){
     const upDirection = checkForDisabledCells("up", x, y, ship.shipSize, table);
     upDirection && directions.push("up");
-    //  }
   }
   if (x + ship.shipSize <= 11) {
-    //  if((firstPlaced && y === ship.y && x > ship.x)){
     const rightDirection = checkForDisabledCells(
       "right",
       x,
@@ -29,10 +24,8 @@ export function optionalDirections(table, x, y, ship, firstPlaced) {
       table
     );
     rightDirection && directions.push("right");
-    //  }
   }
   if (x - ship.shipSize >= 0) {
-    //  if((firstPlaced && y === ship.y && x < ship.x)){
     const leftDirection = checkForDisabledCells(
       "left",
       x,
@@ -41,7 +34,6 @@ export function optionalDirections(table, x, y, ship, firstPlaced) {
       table
     );
     leftDirection && directions.push("left");
-    //  }
   }
   return directions;
 }
@@ -75,7 +67,6 @@ export function suggesmentOption(directions, x, y, shipSize) {
   directions.forEach((direction) => {
     options = options.concat(cellsToMark(direction, x, y, shipSize));
   });
-  // console.log(options);
   return options;
 }
 //return an object with coordinates of the cell to place the "X" on 
@@ -168,46 +159,46 @@ export function disableCellsAroundShip(ship) {
 export function checkIfNeedToBeDisable(x, y, table) {
   if (
     x > 0 &&
-    (table[x - 1][y]?.shipID !== null)// || table[x - 1][y]?.axe !== null)
+    (table[x - 1][y]?.shipID !== null)
   )
     return true;
   if (
     x > 0 &&
     y < 10 &&
-    (table[x - 1][y + 1]?.shipID !== null)// || table[x - 1][y + 1]?.axe !== null)
+    (table[x - 1][y + 1]?.shipID !== null)
   )
     return true;
   if (
     y > 0 &&
-    (table[x][y - 1]?.shipID !== null)// || table[x][y - 1]?.axe !== null)
+    (table[x][y - 1]?.shipID !== null)
   )
     return true;
   if (
     x < 10 &&
     y > 0 &&
-    (table[x + 1][y - 1]?.shipID !== null)// || table[x + 1][y - 1]?.axe !== null)
+    (table[x + 1][y - 1]?.shipID !== null)
   )
     return true;
   if (
     x > 0 &&
     y > 0 &&
-    (table[x - 1][y - 1]?.shipID !== null)// || table[x - 1][y - 1]?.axe !== null)
+    (table[x - 1][y - 1]?.shipID !== null)
   )
     return true;
   if (
     y < 10 &&
-    (table[x][y + 1]?.shipID !== null)// || table[x][y + 1]?.axe !== null)
+    (table[x][y + 1]?.shipID !== null)
   )
     return true;
   if (
     x < 10 &&
-    (table[x + 1][y]?.shipID !== null)// || table[x + 1][y]?.axe !== null)
+    (table[x + 1][y]?.shipID !== null)
   )
     return true;
   if (
     x < 10 &&
     y < 10 &&
-    (table[x + 1][y + 1]?.shipID !== null)// || table[x + 1][y + 1]?.axe !== null)
+    (table[x + 1][y + 1]?.shipID !== null)
   )
     return true;
   return false;
