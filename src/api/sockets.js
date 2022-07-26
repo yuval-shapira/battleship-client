@@ -3,8 +3,8 @@ import io from "socket.io-client";
 let socket;
 
 export function openSocket(highLevelDispatch) {
-  socket = io("http://localhost:3030");
-  //socket = io("https://battleship-game-yuval.herokuapp.com");
+  //socket = io("http://localhost:3030");
+  socket = io("https://battleship-game-yuval-shapira.herokuapp.com");
   socket.on("connect", () => {});
   socket.on("socket_id", (mySocketID) => {
     highLevelDispatch({
