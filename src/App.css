@@ -30,7 +30,7 @@
   transition: background-color 0.2s ease-in-out;
   align-items: center;
 }
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 .disable-Board {
@@ -38,7 +38,7 @@
   width: 100%;
   background-color: #b1b1b1;
 }
-.enter-name-form{
+.enter-name-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,14 +52,14 @@
   align-items: center;
   gap: 15px;
 }
-.game-ID{
+.game-ID {
   margin: 0;
 }
 .game-grid {
   display: grid;
   grid-template-columns: repeat(var(--boardSize), 30px);
 }
-.game-over{
+.game-over {
   background: #b1b1b100;
 }
 .grid-game-container {
@@ -100,7 +100,7 @@
   border-radius: 5px;
   text-align: center;
   padding: 10px;
-  margin: 0px; 
+  margin: 0px;
 }
 .new-game-button {
   display: inline-block;
@@ -110,11 +110,10 @@
   border: 2px solid #b1b1b1;
   border-radius: 5px;
   background-color: #ffffff;
-  color:  rgb(20, 153, 225);
+  color: rgb(20, 153, 225);
 }
 .new-game-container {
   text-align: center;
-
 }
 .opponent-disconnected {
   width: 100%;
@@ -132,7 +131,7 @@
   background: rgb(170, 0, 255);
   color: aliceblue;
 }
-.opponent-turn{
+.opponent-turn {
   background: #b1b1b11f;
   cursor: not-allowed;
   height: 352px;
@@ -218,6 +217,19 @@
     align-items: start;
     margin-right: 10px;
     margin-left: 0px;
+  }
+}
+@media screen and (max-width: 430px) {
+  .cell {
+    width: 20px;
+    height: 20px;
+  }
+  .axe {
+    width: 20px;
+    height: 20px;
+  }
+  .game-grid {
+    grid-template-columns: repeat(var(--boardSize), 20px);
   }
 }
 @media (prefers-reduced-motion: no-preference) {
