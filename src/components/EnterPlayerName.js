@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import NewButton from "./NewButton";
-import { createGame, joinGame } from "../api/sockets";
+import { createGame, joinGame, checkIfCanJionGame } from "../api/sockets";
 
 export default function EnterPlayerName({
   highLevelDispatch,
@@ -11,9 +11,11 @@ export default function EnterPlayerName({
   const [createOrJoin, setCreateOrJoin] = React.useState("Create Game");
   const [myName, setMyName] = React.useState("");
   const [gameID, setGameID] = React.useState("");
+  const [canJoinGame, setCanJoinGame] = React.useState(false);
 
   useEffect(() => {
-    gameIDRequired && createGame(highLevelDispatch, onOpponentName);
+    gameIDRequired &&
+      createGame(highLevelDispatch, onOpponentName, setCanJoinGame);
   }, [gameIDRequired]);
 
   useEffect(() => {
@@ -21,16 +23,25 @@ export default function EnterPlayerName({
       joinGame(gameID, myName, highLevelDispatch, onOpponentName);
   }, [joinGameRequired]);
 
-  function handleFormSubmit(e){
+  useEffect(() => {
+    if (canJoinGame) {
+      highLevelDispatch({
+        type: "JOIN_GAME_REQUIRED",
+        payload: {
+          myName: myName,
+        },
+      });
+    }
+  }, [canJoinGame]);
+
+  function handleFormSubmit(e) {
     e.preventDefault();
     handleClick();
   }
-  
+
   function handleClick() {
-    const regName = /^[A-Za-z][A-Za-z ][A-Za-z]{3,12}$/;
-    const regGameID = /^[A-Za-z0-9]{3,4}$/;
     if (createOrJoin === "Create Game") {
-      if (regName.test(myName)) {
+      if (myName) {
         highLevelDispatch({
           type: "GAME_ID_REQUIRED",
           payload: {
@@ -40,17 +51,12 @@ export default function EnterPlayerName({
       }
     }
     if (createOrJoin === "Join Game") {
-      if (regName.test(myName) && regGameID.test(gameID)) {
-        highLevelDispatch({
-          type: "JOIN_GAME_REQUIRED",
-          payload: {
-            myName: myName,
-          },
-        });
+      if (myName && gameID) {
+        checkIfCanJionGame(gameID, setCanJoinGame);
+
       }
     }
   }
-
   function handleCheckboxChange(e) {
     setCreateOrJoin(e.target.checked ? "Join Game" : "Create Game");
   }

@@ -3,8 +3,8 @@ import io from "socket.io-client";
 let socket;
 
 export function openSocket(highLevelDispatch) {
-  //socket = io("http://localhost:3030");
-  socket = io("https://battleship-game-yuval-shapira.herokuapp.com");
+  socket = io("http://localhost:3030");
+  // socket = io("https://battleship-game-yuval-shapira.herokuapp.com");
   socket.on("connect", () => {});
   socket.on("socket_id", (mySocketID) => {
     highLevelDispatch({
@@ -23,12 +23,23 @@ export function createGame(highLevelDispatch, onOpponentName) {
     payload: { gameID },
   });
   socket.emit("create_a_game", gameID);
+  socket.once("check_if_can_join_game", (data) => {
+    const { playerID } = data;
+    socket.emit("can_join_the_game", { playerID });
+  });
   socket.on("player2_name", onOpponentName);
 
   socket.on("opponent_is_ready", () => {
     highLevelDispatch({
       type: "OPPONENT_IS_READY",
     });
+  });
+}
+// candidate for player 2
+export function checkIfCanJionGame(gameID, setCanJoinGame) {
+  socket.emit("check_if_can_join_game", { gameID, playerID: socket.id });
+  socket.on("YOU_can_join_the_game", () => {
+    setCanJoinGame(true);
   });
 }
 
@@ -43,6 +54,7 @@ export function joinGame(
     type: "JOIN_A_GAME",
     payload: { gameID },
   });
+
   socket.on("player1_name", onOpponentName);
   socket.emit("join_to_existing_game", { gameID, playerName });
 
@@ -53,14 +65,13 @@ export function joinGame(
   });
 }
 
-export function disconnectesListener(playerID, onOpponentDisconnected) {
+export function disconnectesListener(onOpponentDisconnected) {
   socket.on("opponent disconnected", onOpponentDisconnected);
 }
 
-export function sendMyName(gameID, playerName, isPlayerReady) {
+export function sendMyDetails(gameID, playerName, isPlayerReady) {
   socket.emit("get_host_name", { gameID, playerName, isPlayerReady });
 }
-
 export function sendImReady(gameID) {
   socket.emit("i_am_ready", gameID);
 }
@@ -114,4 +125,6 @@ export function closeSockets() {
   socket.off("new_game_req");
   socket.off("new_game_response");
   socket.off("opponent disconnected");
+  socket.off("check_if_can_join_game");
+  socket.off("YOU_can_join_the_game");
 }

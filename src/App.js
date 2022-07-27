@@ -7,7 +7,7 @@ import GameBuilder from "./components/GameBuilder";
 import PlayGame from "./components/PlayGame";
 import GameOver from "./components/GameOver";
 
-import { openSocket, sendMyName, disconnectesListener } from "./api/sockets";
+import { openSocket, sendMyDetails, disconnectesListener } from "./api/sockets";
 
 const initHighLevelState = {
   gameState: "ENTER_NAME",
@@ -41,7 +41,7 @@ export default function App() {
 
   useEffect(() => {
     dataToSend &&
-      sendMyName(dataToSend.gameID, dataToSend.myName, highLevelState.imReady);
+    sendMyDetails(dataToSend.gameID, dataToSend.myName, highLevelState.imReady);
   }, [dataToSend]);
 
   useEffect(() => {
@@ -56,6 +56,7 @@ export default function App() {
   function onOpponentName(data) {
     const { gameID, playerName, playerID, isPlayerReady = false } = data;
     const { myName, opponentName } = highLevelState;
+    
     if (!opponentName) {
       setDataToSend({ gameID, myName });
       highLevelDispatch({
